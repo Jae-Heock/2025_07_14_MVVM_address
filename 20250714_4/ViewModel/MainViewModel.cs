@@ -17,8 +17,9 @@ namespace _20250714_4.ViewModel
     {
         public ObservableCollection<MainModel> Addressing { get; set; } = new ObservableCollection<MainModel>();
         private Model.MainModel model;
-        public string Search_screen {  get; set; } 
-        public Command Search_btn {  get; set; }
+
+        public string Search_screen { get; set; }
+        public Command Search_btn { get; set; }
         public Command Add_btn { get; set; }
         public Command Retouch_btn { get; set; }
         public Command Delete_btn { get; set; }
@@ -29,15 +30,15 @@ namespace _20250714_4.ViewModel
             Addressing = new ObservableCollection<MainModel>();
 
             // Search_btn = new Command(ExeCute_search, _=> true);
-            Add_btn = new Command(ExeCute_add, _=> true);
+            Add_btn = new Command(ExeCute_add, _ => true);
             // Retouch_btn = new Command(ExeCute_retouch, _ => true);
-            Delete_btn = new Command(ExeCute_del, _=> true);
+            Delete_btn = new Command(ExeCute_del, _ => true);
         }
 
 
         public void ExeCute_search()
         {
-            
+
         }
 
         public void ExeCute_add(Object obj)
@@ -46,12 +47,12 @@ namespace _20250714_4.ViewModel
             var window = new AddWindow();
             window.DataContext = newModel;
 
-            if(window.ShowDialog() == true)
+            if (window.ShowDialog() == true)
             {
                 Addressing.Add(newModel);
 
                 string filePath = @"D:\사번\Address3.txt";
-                using (StreamWriter sw  = new StreamWriter(filePath, true))
+                using (StreamWriter sw = new StreamWriter(filePath, true))
                 {
                     sw.WriteLine($"{newModel.Name}, {newModel.Group}, {newModel.Rank}, {newModel.Num}, {newModel.Email} ");
                 }
@@ -59,9 +60,24 @@ namespace _20250714_4.ViewModel
             }
         }
 
-        public void ExeCute_del(Object obj)
+        public void ExeCute_del(object obj)
         {
-            if 
+            MainModel selectedAddress = obj as MainModel;
+            if (selectedAddress != null)
+            {
+                Addressing.Remove(selectedAddress);
+
+                string filePath = @"D:\사번\Address3.txt";
+                using (StreamWriter sw = new StreamWriter(filePath, false))
+                {
+                    foreach (var address in Addressing)
+                    {
+                        sw.WriteLine($"{address.Name}, {address.Group}, {address.Rank}, {address.Num}, {address.Email}");
+                    }
+                }
+
+                MessageBox.Show("삭제 완료");
+            }
         }
 
 
@@ -69,8 +85,9 @@ namespace _20250714_4.ViewModel
 
 
 
+
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnpropertyChanged(String  propertyName)
+        protected void OnpropertyChanged(String propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
