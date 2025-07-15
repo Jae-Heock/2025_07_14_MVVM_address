@@ -22,7 +22,7 @@
                      Text="{Binding SearchTextBox}" x:Name="SearchTextBox"/>
             
             <Button Width="70" Height="20" Margin="120, 0, 0, 0" Content="검색"
-                    Command="{Binding Serach_btn}"/>
+                    Command="{Binding Search_btn}"/>
             
             <Button Width="70" Height="20" Margin="280, 0, 0, 0" Content="추가" 
                     Command="{Binding Add_btn}"/>

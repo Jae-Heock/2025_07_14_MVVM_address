@@ -20,6 +20,8 @@ namespace _20250714_4.ViewModel
     internal class MainViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<MainModel> Addressing { get; set; } = new ObservableCollection<MainModel>();
+        public ObservableCollection<MainModel> OriginalList { get; set; } = new ObservableCollection<MainModel>();
+
         private Model.MainModel model;
 
         public Command Search_btn { get; set; }
@@ -66,43 +68,35 @@ namespace _20250714_4.ViewModel
         // 검색버튼 
         public void ExeCute_search(Object obj)
         {
-            string Key = SearchTextBox.Trim();
-            ObservableCollection<MainModel> searchResult = new ObservableCollection<MainModel>();
+            string key = SearchTextBox?.Trim() ?? "";
+            var filtered = new ObservableCollection<MainModel>();
 
-            foreach(var model in Addressing)
+            foreach (var item in OriginalList)
             {
-                if (SearchIndex == 0)
+                if (SearchIndex == 0) // 전체
                 {
-                    return;
+                    filtered.Add(item);
                 }
-                else if (SearchIndex == 1)              // 이름 
+                else if (SearchIndex == 1 && item.Name.Contains(key))
                 {
-                    if (model.Name.Contains(Key))
-                    {
-                        searchResult.Add(model);
-                    }
+                    filtered.Add(item);
                 }
-                else if (searchIndex == 2)
+                else if (SearchIndex == 2 && item.Group.Contains(key))
                 {
-                    if (model.Group.Contains(Key))
-                    {
-                        searchResult.Add(model);
-                    }
+                    filtered.Add(item);
                 }
-                else if (searchIndex == 3)
+                else if (SearchIndex == 3 && item.Rank.Contains(key))
                 {
-                    if (model.Rank.Contains(Key))
-                    {
-                        searchResult.Add(model);
-                    }
+                    filtered.Add(item);
                 }
             }
 
-            /*
-             *      1. SearchTextBox 에 입력되있는 값을 Key로 가져옴
-             *      2. SearchComboBox 의 인덱스를 설정하고, 해당하는 인덱스의 연락처에 Key값이 있으면 그 값들만 데이터그리드에 보여줌
-             */
+            // 검색 결과를 Addressing에 반영
+            Addressing.Clear();
+            foreach (var i in filtered)
+                Addressing.Add(i);
         }
+
 
         // 추가버튼 
         public void ExeCute_add(Object obj)
@@ -132,6 +126,8 @@ namespace _20250714_4.ViewModel
             if(File.Exists(filePath))
             {
                 Addressing.Clear();
+                OriginalList.Clear();
+
                 var lines = File.ReadLines(filePath);
                 foreach(var line in lines)
                 {
@@ -139,14 +135,17 @@ namespace _20250714_4.ViewModel
 
                     if (parts.Length > 0)
                     {
-                        Addressing.Add(new MainModel
+                        var newItem = new MainModel
                         {
                             Name = parts[0].Trim(),
                             Group = parts[1].Trim(),
                             Rank = parts[2].Trim(),
                             Num = parts[3].Trim(),
                             Email = parts[4].Trim(),
-                        });
+                        };
+
+                        Addressing.Add(newItem);
+                        OriginalList.Add(newItem);
                     }
                 }
             }
@@ -208,7 +207,7 @@ namespace _20250714_4.ViewModel
                         sw.WriteLine($"{address.Name}, {address.Group}, {address.Rank}, {address.Num}, {address.Email}");
                     }
                 }
-                MessageBox.Show("삭제 완료");
+                MessageBox.Show("삭제 완료~!!");
             }
         }
 
