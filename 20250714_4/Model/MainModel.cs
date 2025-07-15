@@ -65,6 +65,7 @@ namespace _20250714_4.Model
             get { return email; }
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(String propertyName)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _20250714_4.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -23,7 +24,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static _20250714_4.MainWindow;
 
-
 namespace _20250714_4
 {
     public partial class AddWindow : Window
@@ -35,7 +35,7 @@ namespace _20250714_4
 
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
-                this.DialogResult = true;
+            this.DialogResult = true;
         }
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
